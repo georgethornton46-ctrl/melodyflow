@@ -1,103 +1,82 @@
-import Image from "next/image";
+import { TopBar } from "@/components/landing/TopBar";
+import { Footer } from "@/components/landing/Footer";
+import { Vsl } from "@/components/landing/Vsl";
+import { Changes, Compare, Faq, Features, FinalCta, HowItWorks, Problem, StickyCta } from "@/components/landing/Sections";
+import { TryFlow } from "@/components/funnel/TryFlow";
+import { UnlockProvider } from "@/components/funnel/UnlockProvider";
+import { KwopFlow } from "@/components/landing/KwopFlow";
+import { Reveal } from "@/components/ui/reveal";
+import { supabaseAdmin } from "@/lib/supabase/server";
 
-export default function Home() {
+export const revalidate = 600;
+
+async function sheetCount(): Promise<number | null> {
+  try {
+    const { count } = await supabaseAdmin().from("sheets").select("id", { count: "exact", head: true });
+    return count ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export default async function Home() {
+  const count = await sheetCount();
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <UnlockProvider>
+      <KwopFlow />
+      <TopBar />
+      <main>
+        <section className="relative overflow-hidden">
+          <div className="dot-grid pointer-events-none absolute inset-x-0 top-0 h-[900px]" />
+          <div className="top-glow pointer-events-none absolute inset-x-0 top-0 h-[700px]" />
+          <div className="relative mx-auto max-w-[1120px] px-4 pb-16 pt-[112px] md:px-8 md:pb-24 md:pt-[150px]">
+            <div className="mx-auto max-w-[860px] text-center">
+              <p className="label">[ VOICE MEMO → SONG SHEET ]</p>
+              <h1 className="h-display mt-5 text-[44px] md:text-[78px]">
+                Hum it. Get the sheet music.
+                <br />
+                <span className="h-grad">In 5 seconds.</span>
+              </h1>
+              <p className="mx-auto mt-5 max-w-[540px] text-[17px] leading-relaxed text-muted md:text-[19px]">
+                Turn a random voice memo into <b className="font-semibold text-fg">notes</b>, <b className="font-semibold text-fg">guitar tab</b> and chords. Try it right here, no account needed.
+              </p>
+            </div>
+            <div className="mt-9 md:mt-12">
+              <TryFlow />
+            </div>
+            <p className="mt-6 text-center font-mono text-[11.5px] uppercase tracking-[0.14em] text-muted">
+              Your audio stays on your device · Free to try · No card
+            </p>
+            {count !== null && count >= 500 && (
+              <p className="mt-2 text-center font-mono text-[11.5px] uppercase tracking-[0.14em] text-dim">
+                {count.toLocaleString("en-US")}+ song sheets written so far
+              </p>
+            )}
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <section className="mx-auto max-w-[1120px] px-4 pb-8 md:px-8">
+          <Reveal>
+            <p className="label text-center">[ WATCH: 60 SECONDS ]</p>
+            <h2 className="h-display mx-auto mt-3 max-w-[760px] text-center text-[34px] md:text-[52px]">
+              How I turn a random voice memo into a full song sheet.
+            </h2>
+          </Reveal>
+          <Reveal className="mx-auto mt-10 max-w-[960px]">
+            <Vsl />
+          </Reveal>
+        </section>
+
+        <Problem />
+        <HowItWorks />
+        <Features />
+        <Changes />
+        <Compare />
+        <Faq />
+        <FinalCta />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <Footer />
+      <StickyCta />
+    </UnlockProvider>
   );
 }

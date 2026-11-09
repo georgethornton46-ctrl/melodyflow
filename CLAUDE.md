@@ -8,7 +8,7 @@
 - Main button everywhere: **"Make my song sheet"** (arrow nudges).
 - Creating screen: "Writing your song sheet…"
 - Paywall title: "Your song sheet is ready." + personal line ("8 bars in A minor · 34 notes · 96 BPM — your melody, written down.")
-- Unlock button: **"See my full sheet"** · sticky bar "See my full sheet · $0.33 / day"
+- Unlock button: **"See my full sheet"** · sticky bar "See my full sheet · $0.30 / day"
 - Sign-up sheet headline: "Save your song sheet"
 - Notifications/emails speak of "your song sheet".
 
@@ -38,7 +38,7 @@ A hum is 10 seconds of effort and the result is computed in the browser + server
 3. **The work** (in place, ≥3 s): steps tick one by one — "Listening to your take", "Finding every pitch", "Locking the tempo", "Detecting the key", "Matching the chords", "Writing notes & tab"; percent counts to 99 % until the server answers; then "Your song sheet is ready." with a lime pulse.
 4. **Teaser (locked result)** in the hero card: their waveform (clear) · "34 notes · 96 BPM · 8 bars" (clear) · one clear insight ("Your melody spans 9 semitones — easy to sing.") · **bars 1–2 as staff + tab in clear** · bars 3+ and the chord line blurred behind a gradient with a lock · big blurred "Key: ■ ■ ■" card. Button **"See my full sheet"**.
 5. **Sign-up sheet** (no account): "Save your song sheet" → Continue with Google / email+password → on success the try is attached to the account (device id) → **paywall opens immediately**.
-6. **Paywall sheet** over the locked sheet: ✕ · "Your song sheet is ready." · personal line · "Choose your plan." + Monthly/Yearly (−20 %) · 3 radio cards (per-day price big) · "Continue with Songwriter" · "$X due today, then every month · Cancel anytime" · "Secure payment, processed by Whop" chips · "What you unlock with <Plan>" · 3 FAQs · small print · bottom repeat "Pick up where you left off".
+6. **Paywall sheet** over the locked sheet: ✕ · "Your song sheet is ready." · personal line · "Choose your plan." + Monthly/Yearly (−20 %) · 3 radio cards (per-day price big) · "Continue with Pro" · "$X due today, then every month · Cancel anytime" · "Secure payment, processed by Whop" chips · "What you unlock with <Plan>" · 3 FAQs · small print · bottom repeat "Pick up where you left off".
 7. **Checkout sheet** (Whop embedded via Kwop) → `onComplete` → `/api/checkout/confirm` → **unlock film** (3 scenes, 5 s) → the sheet unblurs in place.
 8. Returning visitor: logged-in → `/dashboard`; if unpaid, dashboard shows their latest locked sheet with the sticky unlock bar.
 
@@ -47,12 +47,16 @@ Plans come from `GET KWOP_API` (names/ids/prices never hardcoded). Quotas are ma
 
 | Rank | Tag | Song sheets / month | Take length | Unlocks |
 |---|---|---|---|---|
-| 0 (Notebook) | For catching ideas | 20 | 30 s | Full sheet (notes + tab + chords + key), PDF export, 30-day history |
-| 1 (Songwriter) — Most popular | For writing real songs | 60 | 2 min | + Key Changer (all 12 keys, capo hint), unlimited history, share links |
+| 0 (Starter) | For catching ideas | 20 | 30 s | Full sheet (notes + tab + chords + key), PDF export, 30-day history |
+| 1 (Pro) — Most popular | For writing real songs | 60 | 2 min | + Key Changer (all 12 keys, capo hint), unlimited history |
 | 2 (Studio) | For bands & producers | 150 | 5 min | + MIDI & MusicXML export, compare takes side by side |
 
 Free (no plan): 3 tries a day (device + IP, also when signed in), 30 s, result locked after bar 2.
-Final prices: see "Prices" below (chosen by the owner in step 0c).
+### Prices (owner chose "keep" in step 0c — saved in Kwop, ids unchanged)
+- **Starter** (1621) $5/mo = $0.17/day · yearly $48 ($0.13/day) — rank 0, tag "For catching ideas"
+- **Pro** (1622) $9/mo = $0.30/day · yearly $86 ($0.24/day) — rank 1, **Most popular**, tag "For writing real songs"
+- **Studio** (1623) $15/mo = $0.50/day · yearly $144 ($0.39/day) — rank 2, tag "For bands & producers"
+Kwop feature lists were rewritten to honest ones (no stem separation / multi-track). Share links are on every paid plan.
 
 ## Visual direction (Music: dark & vibrant)
 - Colors: bg `#060606`, surface `#0E0F0C`, card `#141511`, border `rgb(255 255 255 / .09)`, text `#F4F5EF`, muted `#9A9C92`, **brand lime `#C8FF3D`** (buttons, notes, ring), accent coral `#FF6B4A` (record dot, "live"), accent violet-blue `#5B6CFF` used only inside deep gradients (album-card backgrounds), light sections `#FAFAFA` with ink `#0B0B0A`.
