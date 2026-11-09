@@ -64,7 +64,7 @@ export function SheetResult({
       </div>
 
       {/* key / chords / insight */}
-      <div className="grid gap-3 px-5 pt-5 sm:grid-cols-3 md:px-7">
+      <div className="grid grid-cols-2 gap-3 px-5 pt-5 sm:grid-cols-3 md:px-7">
         <button
           type="button"
           onClick={locked ? onUnlock : undefined}
@@ -72,10 +72,10 @@ export function SheetResult({
         >
           <p className="label">Key</p>
           {key ? (
-            <p className="mt-1.5 text-[24px] font-semibold tracking-[-0.02em] text-lime">{keyName(key)}</p>
+            <p className="mt-1.5 text-[20px] font-semibold tracking-[-0.02em] text-lime md:text-[24px]">{keyName(key)}</p>
           ) : (
             <div className="mt-2.5 flex items-center gap-2" aria-label="Key locked">
-              <span className="h-6 w-28 rounded-md bg-lime/60 blur-[7px]" />
+              <span className="h-6 w-24 rounded-md bg-lime/60 blur-[7px]" />
               <Lock className="h-4 w-4 text-muted" />
             </div>
           )}
@@ -96,14 +96,14 @@ export function SheetResult({
             </div>
           ) : (
             <div className="mt-2.5 flex items-center gap-1.5" aria-label="Chords locked">
-              {[0, 1, 2, 3].map((i) => (
-                <span key={i} className="h-6 w-9 rounded-md bg-lime/50 blur-[6px]" />
+              {[0, 1, 2].map((i) => (
+                <span key={i} className="h-6 w-8 rounded-md bg-lime/50 blur-[6px]" />
               ))}
               <Lock className="ml-1 h-4 w-4 text-muted" />
             </div>
           )}
         </button>
-        <div className="rounded-[16px] bg-white/[0.04] p-4 ring-1 ring-white/[0.07]">
+        <div className="col-span-2 rounded-[16px] bg-white/[0.04] p-4 ring-1 ring-white/[0.07] sm:col-span-1">
           <p className="label flex items-center gap-1.5">
             <Sparkles className="h-3 w-3" /> Insight
           </p>
@@ -130,7 +130,7 @@ export function SheetResult({
         {locked && onUnlock && (
           <div className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-3 px-5">
             <span className="flex items-center gap-1.5 rounded-full bg-black/60 px-3 py-1 text-[12.5px] text-fg/80 ring-1 ring-white/10 backdrop-blur">
-              <Lock className="h-3.5 w-3.5" /> {view.bars - view.clearBars} more bars, the key and the chords
+              <Lock className="h-3.5 w-3.5" /> {view.bars > view.clearBars ? `${view.bars - view.clearBars} more bars, the key and the chords` : "The key and the chords"}
             </span>
             <button
               onClick={onUnlock}

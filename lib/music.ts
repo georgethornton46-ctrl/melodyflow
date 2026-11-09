@@ -139,7 +139,7 @@ export function quantize(raw: RawNote[], bpm: number): Note[] {
   const out: Note[] = [];
   for (const r of raw) {
     const s = Math.round((r.t - t0) / six);
-    let d = Math.max(1, Math.round(r.dur / six));
+    const d = Math.max(1, Math.round(r.dur / six));
     const prev = out[out.length - 1];
     if (prev && s <= prev.s) {
       if (prev.m === r.m) {

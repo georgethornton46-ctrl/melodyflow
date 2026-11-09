@@ -12,9 +12,9 @@ export function Footer() {
         <div>
           <p className="label">Product</p>
           <ul className="mt-3 space-y-2 text-[14px] text-fg/80">
-            <li><a href="/#try" className="hover:text-fg">Make a song sheet</a></li>
-            <li><a href="/#how" className="hover:text-fg">How it works</a></li>
-            <li><a href="/#features" className="hover:text-fg">Features</a></li>
+            <li><Link href="/#try" className="hover:text-fg">Make a song sheet</Link></li>
+            <li><Link href="/#how" className="hover:text-fg">How it works</Link></li>
+            <li><Link href="/#features" className="hover:text-fg">Features</Link></li>
           </ul>
         </div>
         <div>

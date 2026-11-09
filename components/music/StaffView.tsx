@@ -21,7 +21,6 @@ type Props = {
 };
 
 const LETTER: Record<string, number> = { C: 0, D: 1, E: 2, F: 3, G: 4, A: 5, B: 6 };
-const W = 1000;
 const STEP = 4.5; // half a staff space
 const LIME = "#C8FF3D";
 
@@ -76,7 +75,11 @@ export function StaffView({
   const lines = Math.max(1, Math.ceil(bars / bpl));
   const H = sysH * lines;
   const clefW = 54;
+  const W = clefW + 2 + bpl * (bpl <= 2 ? 160 : 230);
 
+  const ff = forExport
+    ? { mono: "Menlo, Consolas, 'DejaVu Sans Mono', monospace", sans: "Helvetica, Arial, sans-serif", sym: "'Apple Symbols', 'Segoe UI Symbol', 'DejaVu Sans', serif" }
+    : { mono: "var(--font-jetbrains), monospace", sans: "var(--font-grotesk), sans-serif", sym: "system-ui, 'Apple Symbols', 'Segoe UI Symbol', sans-serif" };
   const ink = forExport ? "#111" : "rgb(244 245 239 / .55)";
   const fg = forExport ? "#111" : "#F4F5EF";
   const noteFill = forExport ? "#111" : LIME;
@@ -104,16 +107,16 @@ export function StaffView({
           <line key={`${key}s${i}`} x1={4} x2={lineEnd} y1={staffTop + i * 9} y2={staffTop + i * 9} stroke={ink} strokeWidth={1} />,
         );
       els.push(
-        <text
+        <path
           key={`${key}clef`}
-          x={8}
-          y={bottomLine + 9}
-          fontSize={52}
-          fill={fg}
-          style={{ fontFamily: "var(--font-music), 'Noto Music', 'Apple Symbols', 'Segoe UI Symbol', serif" }}
-        >
-          {"\u{1D11E}"}
-        </text>,
+          transform={`translate(10 ${staffTop})`}
+          d="M15 53 C11 57 5 54 7 49 C9 45 14 47 13 51 M13 53 L17 -10 C24 -18 27 -3 13 13 C2 24 2 37 13 38 C23 39 25 26 16 24 C10 23 8 30 13 32"
+          fill="none"
+          stroke={fg}
+          strokeWidth={2.4}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />,
       );
     }
     if (showTab) {
@@ -123,7 +126,7 @@ export function StaffView({
         );
       ["T", "A", "B"].forEach((c, i) =>
         els.push(
-          <text key={`${key}tab${i}`} x={22} y={tabTop + 17 + i * 14} fontSize={13} fontWeight={700} fill={fg} textAnchor="middle" fontFamily="var(--font-jetbrains), monospace">
+          <text key={`${key}tab${i}`} x={22} y={tabTop + 17 + i * 14} fontSize={13} fontWeight={700} fill={fg} textAnchor="middle" fontFamily={ff.mono}>
             {c}
           </text>,
         ),
@@ -142,14 +145,14 @@ export function StaffView({
         const target = locked ? lockedEls : els;
         if (ch)
           target.push(
-            <text key={`${key}c${b}`} x={x + 10} y={top + 22} fontSize={17} fontWeight={700} fill={forExport ? "#111" : LIME} fontFamily="var(--font-grotesk), sans-serif">
+            <text key={`${key}c${b}`} x={x + 10} y={top + 22} fontSize={17} fontWeight={700} fill={forExport ? "#111" : LIME} fontFamily={ff.sans}>
               {ch}
             </text>,
           );
         else if (locked)
           lockedEls.push(<rect key={`${key}cr${b}`} x={x + 10} y={top + 8} width={34} height={16} rx={5} fill="rgb(200 255 61 / .5)" />);
         els.push(
-          <text key={`${key}n${b}`} x={x + 3} y={showStaff ? staffTop - 6 : tabTop - 5} fontSize={10} fill={forExport ? "#777" : "#6b6d64"} fontFamily="var(--font-jetbrains), monospace">
+          <text key={`${key}n${b}`} x={x + 3} y={showStaff ? staffTop - 6 : tabTop - 5} fontSize={10} fill={forExport ? "#777" : "#6b6d64"} fontFamily={ff.mono}>
             {b + 1}
           </text>,
         );
@@ -180,7 +183,7 @@ export function StaffView({
         const name = pcName(m, flats);
         if (name.length > 1)
           els.push(
-            <text key={`${k}acc`} x={x - 19} y={y + 5} fontSize={15} fill={fg} style={{ fontFamily: "var(--font-music), 'Noto Music', serif" }}>
+            <text key={`${k}acc`} x={x - 19} y={y + 5} fontSize={15} fill={fg} fontFamily={ff.sym}>
               {name[1]}
             </text>,
           );
@@ -221,7 +224,7 @@ export function StaffView({
         }
         if (showNames)
           els.push(
-            <text key={`${k}nm`} x={x} y={bottomLine + below + 12} fontSize={12} textAnchor="middle" fill={forExport ? "#333" : "#cfd1c8"} fontFamily="var(--font-jetbrains), monospace">
+            <text key={`${k}nm`} x={x} y={bottomLine + below + 12} fontSize={12} textAnchor="middle" fill={forExport ? "#333" : "#cfd1c8"} fontFamily={ff.mono}>
               {pcName(n.m, flats)}
             </text>,
           );
@@ -231,7 +234,7 @@ export function StaffView({
         const label = String(n.fr);
         els.push(<rect key={`${k}tr`} x={x - 7 - (label.length - 1) * 3.5} y={ty - 7} width={14 + (label.length - 1) * 7} height={14} fill={forExport ? "#fff" : "#0d0e0b"} />);
         els.push(
-          <text key={`${k}tn`} x={x} y={ty + 4.5} fontSize={13} fontWeight={600} textAnchor="middle" fill={fg} fontFamily="var(--font-jetbrains), monospace">
+          <text key={`${k}tn`} x={x} y={ty + 4.5} fontSize={13} fontWeight={600} textAnchor="middle" fill={fg} fontFamily={ff.mono}>
             {label}
           </text>,
         );

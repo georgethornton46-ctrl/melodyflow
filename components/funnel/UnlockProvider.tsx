@@ -22,6 +22,9 @@ type Ctx = {
   upgrade: (o: UpgradeOpts) => void;
   signIn: (o: { title: string; then?: () => void }) => void;
   ensurePlans: () => Promise<PublicPlanC[] | null>;
+  checkout: (plan: PublicPlanC, period: Period) => void;
+  busy: boolean;
+  notice: string | null;
 };
 
 const UnlockCtx = createContext<Ctx | null>(null);
@@ -194,7 +197,7 @@ export function UnlockProvider({ children, initialMe = null }: { children: React
   const nextPlan = plans && me ? plans[me.rank + 1] ?? null : null;
 
   return (
-    <UnlockCtx.Provider value={{ me, meLoaded, plans, refreshMe, unlock, upgrade, signIn, ensurePlans: loadPlans }}>
+    <UnlockCtx.Provider value={{ me, meLoaded, plans, refreshMe, unlock, upgrade, signIn, ensurePlans: loadPlans, checkout: startCheckout, busy, notice }}>
       {children}
 
       {/* sign-up sheet */}

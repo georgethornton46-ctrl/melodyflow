@@ -43,7 +43,11 @@ const TYPES: Record<number, [string, boolean]> = {
 };
 function split(d: number): number[] {
   const out: number[] = [];
-  for (const v of [16, 12, 8, 6, 4, 3, 2, 1]) while (d >= v) (out.push(v), (d -= v));
+  for (const v of [16, 12, 8, 6, 4, 3, 2, 1])
+    while (d >= v) {
+      out.push(v);
+      d -= v;
+    }
   return out;
 }
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
